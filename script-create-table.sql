@@ -2,98 +2,90 @@ create schema escola;
 
 use escola;
 
-CREATE TABLE CIDADE (
+CREATE TABLE cidade (
 CodCidade char(10) NOT NULL,
-NomeCidade varchar(50) NOT NULL,
-primary key(CodCidade)
+NomeCidade varchar(50) ,
+PRIMARY KEY (CodCidade)
 );
 
-create table disciplina (
+CREATE TABLE disciplina (
 CodDis char(10) NOT NULL,
-NomeDis varchar(50) NOT NULL,
-primary key(CodDis)
+NomeDis varchar(50),
+PRIMARY KEY (CodDis)
 );
 
-create table Pessoa (
+CREATE TABLE pessoa (
 CodPessoa char(10) NOT NULL,
-NomePessoa varchar(50) NOT NULL,
+NomePessoa varchar(50),
 TelPessoa int,
 CodCidade char(10) NOT NULL,
-primary key (CodPessoa),
-foreign key (CodCidade) references cidade (CodCidade)
+PRIMARY KEY (CodPessoa),
+FOREIGN KEY (CodCidade) REFERENCES cidade (CodCidade)
 );
 
-drop table Pessoa;
-
-create table Pessoa (
+CREATE TABLE professor (
 CodPessoa char(10) NOT NULL,
-NomePessoa varchar(50) NOT NULL,
-TelPessoa int,
-CodCidade char(10) NOT NULL,
-primary key (CodPessoa),
-foreign key (CodCidade) references cidade (CodCidade)
+RG char(9) NOT NULL,
+CPF char(11) NOT NULL,
+Titulacao varchar(50),
+PRIMARY KEY (CodPessoa),
+FOREIGN KEY (CodPessoa) REFERENCES pessoa(CodPessoa),
+UNIQUE KEY (RG),
+UNIQUE KEY (CPF)
 );
 
-CREATE TABLE Professor (
-CodPessoa char(10) NOT NULL,
-RG int,
-CPF int,
-Titulacao varchar(50) NOT NULL,
-primary key(CodPessoa),
-foreign key (CodPessoa) references pessoa(CodPessoa)
-);
-
-CREATE TABLE Escola (
+CREATE TABLE escola (
 CodEscola char(10) NOT NULL,
-NomeEsc varchar(50) NOT NULL,
-CodCidade char(10) NOT NULL,
+NomeEsc varchar(50),
+CodCidade char(10),
 CodPessoa char(10) NOT NULL,
-primary key(CodEscola),
-foreign key(CodPessoa) references professor(CodPessoa),
-foreign key(CodCidade) references cidade(CodCidade)
+PRIMARY KEY (CodEscola),
+FOREIGN KEY (CodPessoa) REFERENCES professor(CodPessoa),
+FOREIGN KEY (CodCidade) REFERENCES cidade(CodCidade)
 );
 
-CREATE TABLE Ministra(
+CREATE TABLE ministra(
 CodPessoa char(10) NOT NULL,
 CodDis char(10) NOT NULL,
-primary key(CodPessoa, CodDis),
-foreign key(CodPessoa) references professor(CodPessoa),
-foreign key(CodDis) references disciplina(CodDis)
+PRIMARY KEY (CodPessoa, CodDis),
+FOREIGN KEY (CodPessoa) REFERENCES professor(CodPessoa),
+FOREIGN KEY (CodDis) REFERENCES disciplina(CodDis)
 );
 
-CREATE TABLE Turma (
+CREATE TABLE turma (
 CodTurma char(10) NOT NULL,
-NomeTurma varchar(50) NOT NULL,
+NomeTurma varchar(50),
 CodEscola char(10) NOT NULL,
-primary key(CodTurma),
-foreign key(CodEscola) references escola(CodEscola)
+PRIMARY KEY (CodTurma),
+FOREIGN KEY (CodEscola) REFERENCES escola(CodEscola)
 );
 
-CREATE TABLE MinistraTurma (
+CREATE TABLE ministraturma (
 CodTurma char(10) NOT NULL,
 CodPessoa char(10) NOT NULL,
 CodDis char(10) NOT NULL,
-primary key(CodTurma, CodPessoa, CodDis),
-foreign key(CodTurma) references turma(CodTurma),
-foreign key(CodPessoa, CodDis) references ministra(CodPessoa, CodDis)
+PRIMARY KEY (CodTurma, CodPessoa, CodDis),
+FOREIGN KEY (CodTurma) REFERENCES turma(CodTurma),
+FOREIGN KEY (CodPessoa, CodDis) REFERENCES ministra(CodPessoa, CodDis)
 );
 
-CREATE TABLE Aluno (
+CREATE TABLE aluno (
 CodPessoa char(10) NOT NULL,
 MatAluno int NOT NULL,
-DataNas date NOT NULL,
+DataNas date,
 CodTurma char(10),
-primary key(CodPessoa),
-foreign key(CodPessoa) references pessoa(CodPessoa),
-foreign key(CodTurma) references turma(CodTurma)
+PRIMARY KEY (CodPessoa),
+FOREIGN KEY (CodPessoa) REFERENCES pessoa(CodPessoa),
+FOREIGN KEY (CodTurma) REFERENCES turma(CodTurma),
+UNIQUE KEY (MatAluno)
 );
 
 CREATE TABLE Contato (
 NomeCont varchar(50) NOT NULL,
 TelCont int,
 CodPessoa char(10) NOT NULL,
-primary key(NomeCont, CodPessoa),
-foreign key(CodPessoa) references aluno(CodPessoa)
+PRIMARY KEY (NomeCont, CodPessoa),
+FOREIGN KEY (CodPessoa) REFERENCES aluno(CodPessoa)
 );
 
 
