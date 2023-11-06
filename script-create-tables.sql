@@ -90,3 +90,6 @@ FOREIGN KEY (CodPessoa) REFERENCES aluno(CodPessoa)
 
 
 
+ALTER TABLE pessoa MODIFY TelPessoa char(11);
+ALTER TABLE aluno MODIFY MatAluno char(9);
+ALTER TABLE contato MODIFY TelCont char(11);
